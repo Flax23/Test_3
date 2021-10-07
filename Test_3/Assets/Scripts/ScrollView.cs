@@ -55,9 +55,15 @@ public class ScrollView : MonoBehaviour
         {
             foreach (var user in userDataBase)
             {
-                if (userName.text == user.name)
+                int nameLenth = userName.name.Length;
+
+                while (nameLenth > 0)
                 {
-                    usersUnfo.text = "Name: " + user.name + "\r\nAge: " + user.age + "\r\nRelation: " + user.relation;
+                    if (userName.text == user.name)
+                    {
+                        usersUnfo.text = "Name: " + user.name + "\r\nAge: " + user.age + "\r\nRelation: " + user.relation;
+                    }
+                    nameLenth --;
                 }
             }
         }
