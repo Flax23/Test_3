@@ -1,18 +1,114 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System.IO;
 
 public class ScrollView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private RectTransform prefab;
+    [SerializeField] private RectTransform content;
+    [SerializeField] private List<Users> userDataBase = new List<Users>();
+
+    [SerializeField] private InputField userName;
+    [SerializeField] private Text usersUnfo;
+
+    private void Start()
     {
-        
+        ReadJSON();
+        InstantiatePrefab();
     }
 
-    // Update is called once per frame
-    void Update()
+    void InstantiatePrefab()
     {
-        
+        foreach (var user in userDataBase)
+        {
+            var instance = GameObject.Instantiate(prefab.gameObject) as GameObject;
+            instance.transform.SetParent(content, false);
+            InitializeUserView(instance, user);
+        }
+    }
+
+    void InitializeUserView(GameObject viewGameObject, Users user)
+    {
+        TestUserView view = new TestUserView(viewGameObject.transform);
+        view.titleText.text = user.name;      
+    }
+
+    public class TestUserView
+    {
+        public Text titleText;
+       
+        public TestUserView(Transform rootView)
+        {
+            titleText = rootView.Find("UserName").GetComponent<Text>();          
+        }
+    }
+
+    public void UpdateUsers()
+    {
+        if (userName.text == "")
+        {
+            Debug.Log("Error!");
+        }
+        else 
+        {
+            foreach (var user in userDataBase)
+            {
+                if (userName.text == user.name)
+                {
+                    usersUnfo.text = "Name: " + user.name + "\r\nAge: " + user.age + "\r\nRelation: " + user.relation;
+                }
+            }
+        }
+    }
+
+    public void ReadJSON()
+    {
+        string path = Application.streamingAssetsPath + "/Users.dat";
+        string JSONString = File.ReadAllText(path);
+        Users[] user = JsonHelper.FromJson<Users>(JSONString);
+        for (int i = 0; i < user.Length; i++)
+        {
+            userDataBase.Add(new Users() { userId = i, name = user[i].name, age = user[i].age, relation = user[i].relation });
+        }
+    }
+
+    [System.Serializable]
+    public class Users
+    {
+        public string name;
+        public int age;
+        public int relation;
+        public int userId;
+    }
+
+    public static class JsonHelper
+    {
+        public static T[] FromJson<T>(string json)
+        {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.users;
+        }
+
+        public static string ToJson<T>(T[] array)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.users = array;
+            return JsonUtility.ToJson(wrapper);
+        }
+
+        public static string ToJson<T>(T[] array, bool prettyPrint)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.users = array;
+            return JsonUtility.ToJson(wrapper, prettyPrint);
+        }
+
+        [System.Serializable]
+        private class Wrapper<T>
+        {
+            public T[] users;
+        }
     }
 }
