@@ -11,7 +11,7 @@ public class ScrollView : MonoBehaviour
     [SerializeField] private List<Users> userDataBase = new List<Users>();
 
     [SerializeField] private InputField userName;
-    [SerializeField] private Text usersUnfo;
+    [SerializeField] private Text usersInfo;
 
     private void Start()
     {
@@ -47,25 +47,21 @@ public class ScrollView : MonoBehaviour
 
     public void UpdateUsers()
     {
-        if (userName.text == "")
-        {
-            Debug.Log("Error!");
-        }
+        if (userName.text == "") usersInfo.text = "Empty field!";
+                
         else 
         {
-            foreach (var user in userDataBase)
-            {
-                int nameLenth = userName.name.Length;
+            usersInfo.text = "";
 
-                while (nameLenth > 0)
+            for (int i = 0; i < userDataBase.Count; i++)
+            {             
+                if (userName.text == userDataBase[i].name)
                 {
-                    if (userName.text == user.name)
-                    {
-                        usersUnfo.text = "Name: " + user.name + "\r\nAge: " + user.age + "\r\nRelation: " + user.relation;
-                    }
-                    nameLenth --;
-                }
+                    usersInfo.text += "Name: " + userDataBase[i].name + "\r\nAge: " + userDataBase[i].age + "\r\nRelation: " + userDataBase[i].relation + "\r\n\r\n";
+                }               
             }
+
+            if (usersInfo.text == "") usersInfo.text = "User is not found!";
         }
     }
 

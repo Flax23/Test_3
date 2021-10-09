@@ -1067,7 +1067,7 @@ MonoBehaviour:
   content: {fileID: 1444016632}
   userDataBase: []
   userName: {fileID: 626819995}
-  usersUnfo: {fileID: 271595314}
+  usersInfo: {fileID: 271595314}
 --- !u!1 &1473703064
 GameObject:
   m_ObjectHideFlags: 0
