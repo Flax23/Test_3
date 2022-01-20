@@ -14,11 +14,11 @@ GameObject:
   - component: {fileID: 4407614971631452485}
   m_Layer: 5
   m_Name: ListPrefab
-  m_TagString: Untagged
+  m_TagString: User
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &501756930884797670
 RectTransform:
   m_ObjectHideFlags: 0

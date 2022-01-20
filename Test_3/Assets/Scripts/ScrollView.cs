@@ -54,11 +54,14 @@ public class ScrollView : MonoBehaviour
             usersInfo.text = "";
 
             for (int i = 0; i < userDataBase.Count; i++)
-            {             
+            {
+               
                 if (userName.text == userDataBase[i].name)
                 {
+                    var temp = content.Find("ListPrefab(Clone)").GetComponent<Text>();
+                    temp.gameObject.SetActive(true);
                     usersInfo.text += "Name: " + userDataBase[i].name + "\r\nAge: " + userDataBase[i].age + "\r\nRelation: " + userDataBase[i].relation + "\r\n\r\n";
-                }               
+                }            
             }
 
             if (usersInfo.text == "") usersInfo.text = "User is not found!";
