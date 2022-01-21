@@ -12,6 +12,7 @@ public class ScrollView : MonoBehaviour
 
     [SerializeField] private InputField userName;
     [SerializeField] private Text usersInfo;
+    
 
     private void Start()
     {
@@ -19,12 +20,15 @@ public class ScrollView : MonoBehaviour
         InstantiatePrefab();
     }
 
+
     void InstantiatePrefab()
     {
         foreach (var user in userDataBase)
         {
-            var instance = GameObject.Instantiate(prefab.gameObject) as GameObject;
+            var instance = GameObject.Instantiate(prefab.gameObject) as GameObject;         
             instance.transform.SetParent(content, false);
+            instance.transform.name = user.name;
+            //instance.SetActive(true);
             InitializeUserView(instance, user);
         }
     }
@@ -32,7 +36,7 @@ public class ScrollView : MonoBehaviour
     void InitializeUserView(GameObject viewGameObject, Users user)
     {
         TestUserView view = new TestUserView(viewGameObject.transform);
-        view.titleText.text = user.name;      
+        view.titleText.text = user.name;
     }
 
     public class TestUserView
@@ -47,21 +51,36 @@ public class ScrollView : MonoBehaviour
 
     public void UpdateUsers()
     {
-        if (userName.text == "") usersInfo.text = "Empty field!";
+
+
+        if (userName.text == "")
+        {
+            usersInfo.text = "Empty field!";
+
+            for (int i = 0; i < content.childCount; i++) content.GetChild(i).gameObject.SetActive(false);
+        } 
+
+
                 
         else 
         {
             usersInfo.text = "";
+            
 
             for (int i = 0; i < userDataBase.Count; i++)
             {
-               
-                if (userName.text == userDataBase[i].name)
+                if (userDataBase[i].name.Contains(userName.text))
+                {              
+                    content.GetChild(i).gameObject.SetActive(true);
+
+                    usersInfo.text += "Name: " + userDataBase[i].name + "\r\nAge: " + userDataBase[i].age +
+                        "\r\nRelation: " + userDataBase[i].relation + "\r\n\r\n";
+                }
+
+                else
                 {
-                    var temp = content.Find("ListPrefab(Clone)").GetComponent<Text>();
-                    temp.gameObject.SetActive(true);
-                    usersInfo.text += "Name: " + userDataBase[i].name + "\r\nAge: " + userDataBase[i].age + "\r\nRelation: " + userDataBase[i].relation + "\r\n\r\n";
-                }            
+                    content.GetChild(i).gameObject.SetActive(false);
+                }
             }
 
             if (usersInfo.text == "") usersInfo.text = "User is not found!";
