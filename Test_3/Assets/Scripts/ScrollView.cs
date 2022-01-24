@@ -57,7 +57,7 @@ public class ScrollView : MonoBehaviour
         {
             usersInfo.text = "Empty field!";
 
-            for (int i = 0; i < content.childCount; i++) content.GetChild(i).gameObject.SetActive(false);
+            for (int i = 0; i < content.childCount; i++) content.GetChild(i).gameObject.SetActive(true);
         } 
 
 
@@ -84,6 +84,7 @@ public class ScrollView : MonoBehaviour
             }
 
             if (usersInfo.text == "") usersInfo.text = "User is not found!";
+           
         }
     }
 
